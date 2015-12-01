@@ -35,63 +35,77 @@
                 echo '<a href="index.php?logout">wyloguj się</a>';
                 
                 echo '<br><br><br>';  
-                echo '<center> Panel operatora - wybierz pozycję z pośród dostępnych lokalizacji: </center><br><br>'; 
+                echo '<center> Panel operatora - wybierz pozycję z pośród dostępnych lokalizacji: </center><br><br><br><br>'; 
           
-                echo '<center>Maszyna: <strong>'.$local_typ.' '.$local_nazwa.'</strong> położenie: <strong>'.$local_lokalizacja.'</strong></center>';
-     
-                $question = 'SELECT id_detal, nazwa FROM system_detale.detal WHERE maszyny_id_maszyny=\''.$local_maszyna.'\';';
-                $res=mysql_query($question);
-                $i=0;
-                while ($user_id=mysql_fetch_array($res))
-                {
-                    $local_moja_id_detal[$i] = $user_id['id_detal'];
-                    $local_moja_nazwa[$i] = $user_id['nazwa'];
-                    $i++;
-                }
-                $ilosc_wierszy = $i-1;
-                $tresc = '<table border="2" rules="all"><tr><td><strong> numer: </strong></td><td><strong> nazwa: </strong></td></tr>';
-                for($i=0;$i<=$ilosc_wierszy;$i++)
-                {
-                    $tresc.='<tr><td><center>'.$local_moja_id_detal[$i].'</center></td><td><center>'.$local_moja_nazwa[$i].'</center></td></tr>';
-                }
-                $tresc.= '</table>';
-                echo '<center>'.$tresc.'</center>';
-               
+                //Pobranie detalu z miejsca żródłowego//////////////////////////////////////////////////////////////////
                 
-
-             
+                echo '<center>Pobieranie detalu z miejsca źródłowego do: <strong>'.$local_typ.' '.$local_nazwa.'</strong> położenie: <strong>'.$local_lokalizacja.'</strong></center>';
+                echo '<br>';
+                
+                $zapytanie = mysql_query ("SELECT id_detal, nazwa FROM system_detale.detal WHERE maszyny_id_maszyny=0;");
+                echo '<center><select name="zrodlo">';
+                while($option = mysql_fetch_assoc($zapytanie)) {
+                    echo '<option value="'.$option['id_detal'].'">'.$option['id_detal'].' '.$option['nazwa'].'</option>';
+                }
+                echo '</select></center>';
+                ?>
+                    <center><form action="" method="post">
+                    <input type="hidden" name="zatwierdz1" value="true">
+                    <input type="submit" value="Zatwierdź">
+                    </form></center>
+                <?php
+                
                 echo '<br><br>';
-                echo '<center>Źródło:</center>';
                 
-                $i=0;
-                $question = 'SELECT id_detal, nazwa FROM system_detale.detal WHERE maszyny_id_maszyny=0;';
-                $res=mysql_query($question);
-                while ($user_id=mysql_fetch_array($res))
-                {
-                    $local_src_id_detal[$i] = $user_id['id_detal'];
-                    $local_src_nazwa[$i] = $user_id['nazwa'];
-                    $i++;
-                }    
-                
-                $ilosc_wierszy = $i-1;
-                $tresc = '<table border="2" rules="all"><tr><td><strong> numer: </strong></td><td><strong> nazwa: </strong></td></tr>';
-                for($i=0;$i<=$ilosc_wierszy;$i++)
-                {
-                    $tresc.='<tr><td><center>'.$local_src_id_detal[$i].'</center></td><td><center>'.$local_src_nazwa[$i].'</center></td></tr>';
+                //Przenoszenie detalu z maszyny do innej maszyny/////////////////////////////////////////////////////////
+             
+                echo '<center>Przenoszenie detalu z maszyny: <strong>'.$local_typ.' '.$local_nazwa.'</strong> położenie: <strong>'.$local_lokalizacja.'</strong> do innej maszyny.</center>';
+                echo '<br>';
+                $question = 'SELECT id_detal, nazwa FROM system_detale.detal WHERE maszyny_id_maszyny=\''.$local_maszyna.'\';';
+                $zapytanie = mysql_query ($question);
+                echo '<center><select name="maszyna">';
+                while($option = mysql_fetch_assoc($zapytanie)) {
+                    echo '<option value="'.$option['id_detal'].'">'.$option['id_detal'].' '.$option['nazwa'].'</option>';
                 }
-                $tresc.= '</table>';
-                echo '<center>'.$tresc.'</center>';
+                echo '</select></center>';
+                echo '<br>';
+                
+                $zapytanie = mysql_query ("SELECT * FROM system_detale.maszyny WHERE id_maszyny <> 0;");
+                echo '<center><select name="maszyny">';
+                while($option = mysql_fetch_assoc($zapytanie)) {
+                    echo '<option value="'.$option['id_maszyny'].'">'.$option['id_maszyny'].' '.$option['nazwa'].' '.$option['typ'].' '.$option['lokalizacja'].'</option>';
+                }
+                echo '</select></center>';
+                ?>
+                    <center><form action="" method="post">
+                    <input type="hidden" name="zatwierdz2" value="true">
+                    <input type="submit" value="Zatwierdź">
+                    </form></center>
+                  
+                <?php            
                 
                 
-                
-                
-
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
             }
-        else {
-          echo '<meta http-equiv="refresh" content="1; URL=index.php">';
-          echo '<p style="padding-top:10px;"><strong>Próba nieautoryzowanego dostępu...</strong><br>trwa przenoszenie do formularza logowania<p></p>';
-             }
+            
+        else 
+            {
+                echo '<meta http-equiv="refresh" content="1; URL=index.php">';
+                echo '<p style="padding-top:10px;"><strong>Próba nieautoryzowanego dostępu...</strong><br>trwa przenoszenie do formularza logowania<p></p>';
+            }
+            
+            
+        if (isset($_POST['zatwierdz1'])) 
+        {
+            echo 'zat1 ok';  //kod do przyjecia detalu
+        }
+        
+        if (isset($_POST['zatwierdz2'])) 
+        {
+            echo 'zat2 ok'; //kod do przeniesienia detalu
+        }
+            
         ?>
-      
+            
     </body>
     </html>
