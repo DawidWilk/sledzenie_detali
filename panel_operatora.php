@@ -43,17 +43,21 @@
                 echo '<br>';
                 
                 $zapytanie = mysql_query ("SELECT id_detal, nazwa FROM system_detale.detal WHERE maszyny_id_maszyny=0;");
-                echo '<center><select name="zrodlo">';
+                ?>
+                
+                <form method=post action=''>
+                <center><select name='zrodlo'>
+                <option value=''> </option>
+                <?php 
                 while($option = mysql_fetch_assoc($zapytanie)) {
                     echo '<option value="'.$option['id_detal'].'">'.$option['id_detal'].' '.$option['nazwa'].'</option>';
                 }
-                echo '</select></center>';
                 ?>
-                    <center><form action="" method="post">
-                    <input type="hidden" name="zatwierdz1" value="true">
-                    <input type="submit" value="Zatwierdź">
-                    </form></center>
-                <?php
+
+                <input type=submit name="zatwierdz1" value="Zatwierdź">
+                </form></center>
+                
+                <?php 
                 
                 echo '<br><br>';
                 
@@ -63,29 +67,38 @@
                 echo '<br>';
                 $question = 'SELECT id_detal, nazwa FROM system_detale.detal WHERE maszyny_id_maszyny=\''.$local_maszyna.'\';';
                 $zapytanie = mysql_query ($question);
-                echo '<center><select name="maszyna">';
+                ?>
+                <form method=post action=''> 
+                <center><select name='maszyna'>
+                <option value=''> </option>
+                <?php
                 while($option = mysql_fetch_assoc($zapytanie)) {
                     echo '<option value="'.$option['id_detal'].'">'.$option['id_detal'].' '.$option['nazwa'].'</option>';
                 }
-                echo '</select></center>';
-                echo '<br>';
+                ?>
+                </select></center>
+                <br>
                 
+                <?php
                 $zapytanie = mysql_query ("SELECT * FROM system_detale.maszyny WHERE id_maszyny <> 0;");
-                echo '<center><select name="maszyny">';
+                ?>
+                   
+                <center><select name='maszyny'>
+                <option value=''> </option>
+                <?php 
                 while($option = mysql_fetch_assoc($zapytanie)) {
                     echo '<option value="'.$option['id_maszyny'].'">'.$option['id_maszyny'].' '.$option['nazwa'].' '.$option['typ'].' '.$option['lokalizacja'].'</option>';
                 }
-                echo '</select></center>';
                 ?>
-                    <center><form action="" method="post">
-                    <input type="hidden" name="zatwierdz2" value="true">
-                    <input type="submit" value="Zatwierdź">
-                    </form></center>
+                 
+                <input type="submit" name="zatwierdz2" value="Zatwierdź">
+                </form></center>
                   
-                <?php            
+                          
                 
-                
+                <?php
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                
             }
             
         else 
@@ -97,15 +110,30 @@
             
         if (isset($_POST['zatwierdz1'])) 
         {
-            echo 'zat1 ok';  //kod do przyjecia detalu
+            if($_POST['zrodlo']) 
+            {
+                $var = $_POST['zrodlo'];
+                echo $var;
+            }
+            else    
+            {
+                   echo 'Wybierz detal do przeniesienia!';
+            }
         }
         
         if (isset($_POST['zatwierdz2'])) 
         {
-            echo 'zat2 ok'; //kod do przeniesienia detalu
+            if((isset($_POST['maszyna'])) && ($_POST['maszyny'])) 
+            {
+                   echo $_POST['maszyna'];
+                   echo $_POST['maszyny'];
+            }
+            else    
+            {
+                   echo 'Wypełnij pola!';
+            }
         }
-            
+           
         ?>
-            
     </body>
     </html>
