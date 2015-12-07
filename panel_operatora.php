@@ -108,12 +108,16 @@
             }
             
             
-        if (isset($_POST['zatwierdz1'])) 
+        if (isset($_POST['zatwierdz1'])) //update przyniesienie detalu do swojej maszyny
         {
             if($_POST['zrodlo']) 
-            {
-                $var = $_POST['zrodlo'];
-                echo $var;
+            {                                
+                $question = 'UPDATE system_detale.detal SET maszyny_id_maszyny=\''.$local_maszyna.'\' WHERE id_detal=\''.$_POST['zrodlo'].'\';';
+                $zapytanie = mysql_query ($question);
+                if ( $zapytanie === \TRUE) 
+                    {echo "Pomyślnie pobrano detal"; header('Refresh: 1; url=panel_operatora.php');} 
+                else 
+                    {echo "Błąd sql";}
             }
             else    
             {
@@ -121,12 +125,16 @@
             }
         }
         
-        if (isset($_POST['zatwierdz2'])) 
+        if (isset($_POST['zatwierdz2']))  //update przeniesienie detalu na inna maszyne
         {
             if((isset($_POST['maszyna'])) && ($_POST['maszyny'])) 
             {
-                   echo $_POST['maszyna'];
-                   echo $_POST['maszyny'];
+                $question = 'UPDATE system_detale.detal SET maszyny_id_maszyny=\''.$_POST['maszyny'].'\' WHERE id_detal=\''.$_POST['maszyna'].'\';';
+                $zapytanie = mysql_query ($question);
+                if ( $zapytanie === \TRUE)
+                    {echo "Pomyślnie przeniesiono detal"; header('Refresh: 1; url=panel_operatora.php'); } 
+                else
+                    {echo "Błąd sql";} 
             }
             else    
             {
