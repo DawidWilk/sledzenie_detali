@@ -10,6 +10,7 @@
 
     <body>
      <?php 
+     //echo date('H:i:s Y-m-d');
         if ($_SESSION['auth'] == TRUE) 
             {
                 $question = 'SELECT id_operatorzy, imie, nazwisko, maszyny_id_maszyny FROM system_detale.operatorzy WHERE imie=\''.$_SESSION['imie'].'\' AND nazwisko=\''.$_SESSION['nazwisko'].'\';';
@@ -108,13 +109,17 @@
             }
             
             
-        if (isset($_POST['zatwierdz1'])) //update przyniesienie detalu do swojej maszyny
+        if (isset($_POST['zatwierdz1'])) //POBRANIE DETALU Z MIEJSCA ZRODLOWEGO//////////////////////////
         {
             if($_POST['zrodlo']) 
             {                                
                 $question = 'UPDATE system_detale.detal SET maszyny_id_maszyny=\''.$local_maszyna.'\' WHERE id_detal=\''.$_POST['zrodlo'].'\';';
-                $zapytanie = mysql_query ($question);
-                if ( $zapytanie === \TRUE) 
+                $zapytanie = mysql_query ($question);   //pobranie detalu
+                
+                $question = 'INSERT INTO system_detale.historia (operatorzy_id_operatorzy, detal_id_detal, maszyny_id_maszyny, typ_operacji, maszyna_poprzednia, data) VALUES ('.$local_id.','.$_POST['zrodlo'].','.$local_maszyna.',"pobranie",0,"'.date('H:i:s Y-m-d').'");';
+                $zapytanie_historia = mysql_query($question);  //wpis do historii
+
+                if (( $zapytanie === \TRUE)&& ( $zapytanie_historia === \TRUE))
                     {echo "Pomyślnie pobrano detal"; header('Refresh: 1; url=panel_operatora.php');} 
                 else 
                     {echo "Błąd sql";}
@@ -125,13 +130,17 @@
             }
         }
         
-        if (isset($_POST['zatwierdz2']))  //update przeniesienie detalu na inna maszyne
+        if (isset($_POST['zatwierdz2']))  //PRZENIESIENIE DETALU DO INNEJ MASZYNY /////////////////////////////////////
         {
             if((isset($_POST['maszyna'])) && ($_POST['maszyny'])) 
             {
                 $question = 'UPDATE system_detale.detal SET maszyny_id_maszyny=\''.$_POST['maszyny'].'\' WHERE id_detal=\''.$_POST['maszyna'].'\';';
                 $zapytanie = mysql_query ($question);
-                if ( $zapytanie === \TRUE)
+                
+                $question = 'INSERT INTO system_detale.historia (operatorzy_id_operatorzy, detal_id_detal, maszyny_id_maszyny, typ_operacji, maszyna_poprzednia, data) VALUES ('.$local_id.','.$_POST['maszyna'].','.$_POST['maszyny'].',"przeniesienie",'.$local_maszyna.',"'.date('H:i:s Y-m-d').'");';
+                $zapytanie_historia = mysql_query($question);  //wpis do historii
+                
+                if (( $zapytanie === \TRUE)&& ( $zapytanie_historia === \TRUE))
                     {echo "Pomyślnie przeniesiono detal"; header('Refresh: 1; url=panel_operatora.php'); } 
                 else
                     {echo "Błąd sql";} 
