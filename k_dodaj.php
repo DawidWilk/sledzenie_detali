@@ -1,4 +1,4 @@
-4<form name="form-dodawanie" action="" method="post" id="596398803">
+<form name="form-dodawanie" action="" method="post" id="596398803">
           <center>Operacja dodawania detalu:</center><br><br>
           <center>Nazwa detalu: <input type="text" name="nowy_detal_nazwa"> </center>
           <center><input type="submit" name="detal_dodaj" value="Dodaj"> </center>
