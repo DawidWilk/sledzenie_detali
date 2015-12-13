@@ -43,7 +43,7 @@
                 echo '<center>Pobieranie detalu z miejsca źródłowego do: <strong>'.$local_typ.' '.$local_nazwa.'</strong> położenie: <strong>'.$local_lokalizacja.'</strong></center>';
                 echo '<br>';
                 
-                $zapytanie = mysql_query ("SELECT id_detal, nazwa FROM system_detale.detal WHERE maszyny_id_maszyny=0;");
+                $zapytanie = mysql_query ("SELECT id_detal, nazwa FROM system_detale.detal WHERE maszyny_id_maszyny=0 AND stan='uzycie';");
                 ?>
                 
                 <form method=post action=''>
@@ -66,7 +66,7 @@
              
                 echo '<center>Przenoszenie detalu z maszyny: <strong>'.$local_typ.' '.$local_nazwa.'</strong> położenie: <strong>'.$local_lokalizacja.'</strong> do innej maszyny.</center>';
                 echo '<br>';
-                $question = 'SELECT id_detal, nazwa FROM system_detale.detal WHERE maszyny_id_maszyny=\''.$local_maszyna.'\';';
+                $question = 'SELECT id_detal, nazwa FROM system_detale.detal WHERE maszyny_id_maszyny=\''.$local_maszyna.'\' AND stan="uzycie";';
                 $zapytanie = mysql_query ($question);
                 ?>
                 <form method=post action=''> 
@@ -116,8 +116,12 @@
                 $question = 'UPDATE system_detale.detal SET maszyny_id_maszyny=\''.$local_maszyna.'\' WHERE id_detal=\''.$_POST['zrodlo'].'\';';
                 $zapytanie = mysql_query ($question);   //pobranie detalu
                 
+                
+                
                 $question = 'INSERT INTO system_detale.historia (operatorzy_id_operatorzy, detal_id_detal, maszyny_id_maszyny, typ_operacji, maszyna_poprzednia, data) VALUES ('.$local_id.','.$_POST['zrodlo'].','.$local_maszyna.',"pobranie",0,"'.date('H:i:s Y-m-d').'");';
                 $zapytanie_historia = mysql_query($question);  //wpis do historii
+                
+                
 
                 if (( $zapytanie === \TRUE)&& ( $zapytanie_historia === \TRUE))
                     {echo "Pomyślnie pobrano detal"; header('Refresh: 1; url=panel_operatora.php');} 
