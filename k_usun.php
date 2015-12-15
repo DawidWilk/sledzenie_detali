@@ -14,7 +14,7 @@ if (isset($_POST['detal_wyszukaj']))
         while ($baza=mysql_fetch_array($res))
             {
                 $local_detal_id = $baza['id_detal'];
-                $local_nazwa_detalu = $baza['nazwa'];
+                $local_nazwa_detalu = $baza['nazwa_detalu'];
                 $local_maszyna = $baza['maszyny_id_maszyny'];
             }
         $_SESSION['usun_id']=$local_detal_id;
@@ -33,6 +33,10 @@ if (isset($_POST['detal_wyszukaj']))
             {
                 echo 'Nie odnaleziono';
             }
+    }
+    else
+    {
+        echo 'Nie wypołniono pola.';
     }
 }
 
