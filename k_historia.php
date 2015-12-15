@@ -17,11 +17,9 @@ if (isset($_POST['detal_wyszukaj']))
                 $local_maszyna_id = $baza['maszyny_id_maszyny'];
             }
         
-        
-        
         echo 'Detal Id: '.$_POST['wyszukaj_detal_id'].', Nazwa: '.$local_nazwa_detalu.', Maszyna:  '.$local_maszyna.''; echo '<br>';
         
-        $question = 'SELECT * FROM system_detale.historia WHERE detal_id_detal='.$_POST['wyszukaj_detal_id'].';';
+        $question = 'SELECT operatorzy.imie, operatorzy.nazwisko, historia.maszyna_poprzednia, historia.maszyny_id_maszyny, historia.typ_operacji, historia.data FROM system_detale.operatorzy, system_detale.maszyny, system_detale.historia WHERE operatorzy.id_operatorzy=historia.operatorzy_id_operatorzy AND historia.maszyny_id_maszyny=maszyny.id_maszyny AND historia.detal_id_detal='.$_POST['wyszukaj_detal_id'].';';
         $res=mysql_query($question);    //pobranie historii
         
         echo "<table frame=box rules='all'  cellspacing='1'  cellpadding='5' >
@@ -31,7 +29,7 @@ if (isset($_POST['detal_wyszukaj']))
         while ($baza=mysql_fetch_array($res))  //wyswietlanie historii
             {
                 echo "<tr><td>$i</td>"; 
-                echo "<td>"; echo $baza['operatorzy_id_operatorzy']; echo "</td>";
+                echo "<td>"; echo $baza['imie'];  echo " "; echo $baza['nazwisko']; echo "</td>";
                 echo "<td>"; echo $baza['maszyna_poprzednia']; echo '->'; echo $baza['maszyny_id_maszyny']; echo "</td>";
                 echo "<td>"; echo $baza['typ_operacji']; echo "</td>";
                 echo "<td>"; echo $baza['data']; echo "</td>";
