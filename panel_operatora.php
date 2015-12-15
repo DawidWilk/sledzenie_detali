@@ -23,11 +23,11 @@
                     $local_maszyna = $user_id['maszyny_id_maszyny'];
                 } 
 
-                $question = 'SELECT nazwa, typ, lokalizacja FROM system_detale.maszyny WHERE id_maszyny=\''.$local_maszyna.'\';';
+                $question = 'SELECT nazwa_maszyny, typ, lokalizacja FROM system_detale.maszyny WHERE id_maszyny=\''.$local_maszyna.'\';';
                 $res=mysql_query($question);
                 while ($user_id=mysql_fetch_array($res))
                 {
-                    $local_nazwa = $user_id['nazwa'];
+                    $local_nazwa = $user_id['nazwa_maszyny'];
                     $local_typ = $user_id['typ'];
                     $local_lokalizacja = $user_id['lokalizacja'];
                 }                 
@@ -43,7 +43,7 @@
                 echo '<center>Pobieranie detalu z miejsca źródłowego do: <strong>'.$local_typ.' '.$local_nazwa.'</strong> położenie: <strong>'.$local_lokalizacja.'</strong></center>';
                 echo '<br>';
                 
-                $zapytanie = mysql_query ("SELECT id_detal, nazwa FROM system_detale.detal WHERE maszyny_id_maszyny=0 AND stan='uzycie';");
+                $zapytanie = mysql_query ("SELECT id_detal, nazwa_detalu FROM system_detale.detal WHERE maszyny_id_maszyny=0 AND stan='uzycie';");
                 ?>
                 
                 <form method=post action=''>
@@ -51,7 +51,7 @@
                 <option value=''> </option>
                 <?php 
                 while($option = mysql_fetch_assoc($zapytanie)) {
-                    echo '<option value="'.$option['id_detal'].'">'.$option['id_detal'].' '.$option['nazwa'].'</option>';
+                    echo '<option value="'.$option['id_detal'].'">'.$option['id_detal'].' '.$option['nazwa_detalu'].'</option>';
                 }
                 ?>
 
@@ -66,7 +66,7 @@
              
                 echo '<center>Przenoszenie detalu z maszyny: <strong>'.$local_typ.' '.$local_nazwa.'</strong> położenie: <strong>'.$local_lokalizacja.'</strong> do innej maszyny.</center>';
                 echo '<br>';
-                $question = 'SELECT id_detal, nazwa FROM system_detale.detal WHERE maszyny_id_maszyny=\''.$local_maszyna.'\' AND stan="uzycie";';
+                $question = 'SELECT id_detal, nazwa_detalu FROM system_detale.detal WHERE maszyny_id_maszyny=\''.$local_maszyna.'\' AND stan="uzycie";';
                 $zapytanie = mysql_query ($question);
                 ?>
                 <form method=post action=''> 
@@ -74,7 +74,7 @@
                 <option value=''> </option>
                 <?php
                 while($option = mysql_fetch_assoc($zapytanie)) {
-                    echo '<option value="'.$option['id_detal'].'">'.$option['id_detal'].' '.$option['nazwa'].'</option>';
+                    echo '<option value="'.$option['id_detal'].'">'.$option['id_detal'].' '.$option['nazwa_detalu'].'</option>';
                 }
                 ?>
                 </select></center>
@@ -88,7 +88,7 @@
                 <option value=''> </option>
                 <?php 
                 while($option = mysql_fetch_assoc($zapytanie)) {
-                    echo '<option value="'.$option['id_maszyny'].'">'.$option['id_maszyny'].' '.$option['nazwa'].' '.$option['typ'].' '.$option['lokalizacja'].'</option>';
+                    echo '<option value="'.$option['id_maszyny'].'">'.$option['id_maszyny'].' '.$option['nazwa_maszyny'].' '.$option['typ'].' '.$option['lokalizacja'].'</option>';
                 }
                 ?>
                  
